@@ -1,21 +1,21 @@
 #include <iostream>
 #include <thread>
 
-#include "../inc/gui.h"
-#include "../inc/widget/window.h"
-#include "../inc/widget/tab.h"
-#include "../inc/widget/combo.h"
-#include "../inc/widget/label.h"
-#include "../inc/widget/button.h"
-#include "../inc/widget/checkbox.h"
-#include "../inc/widget/list_view.h"
-#include "../inc/widget/edit.h"
-#include "../inc/widget/rich_edit.h"
-#include "../inc/widget/progress.h"
-#include "../inc/layout/fit.h"
-#include "../inc/layout/split.h"
-#include "../inc/layout/grid.h"
-#include "../inc/layout/eva.h"
+#include "gui/inc/gui.h"
+#include "gui/inc/widget/window.h"
+#include "gui/inc/widget/tab.h"
+#include "gui/inc/widget/combo.h"
+#include "gui/inc/widget/label.h"
+#include "gui/inc/widget/button.h"
+#include "gui/inc/widget/checkbox.h"
+#include "gui/inc/widget/list_view.h"
+#include "gui/inc/widget/edit.h"
+#include "gui/inc/widget/rich_edit.h"
+#include "gui/inc/widget/progress.h"
+#include "gui/inc/layout/fit.h"
+#include "gui/inc/layout/split.h"
+#include "gui/inc/layout/grid.h"
+#include "gui/inc/layout/eva.h"
 using namespace gui;
 
 int main()
