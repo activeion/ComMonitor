@@ -18,14 +18,22 @@
 #include "gui/inc/layout/eva.h"
 using namespace gui;
 
+#include <vector>
+#include <string>
+#include "CSerial/SerialWnd.h"
+
 int main()
 {
+
+    wnd<combo> cmb_com;
+    wnd<button> btn_com("open");
     // ChildWin for MainWindow
     wnd<label> lbl_name("name");
     wnd<label> lbl_psw("password");
     wnd<edit> edt_psw = new_<edit>()
             .password_type(true)
             .size(200, 100);
+
     wnd<button> btn_ok("ok");
     wnd<button> btn_cancel("cancel");
     wnd<progress> prog = new_<progress>()
@@ -34,18 +42,18 @@ int main()
     // layout for MainWindow
     auto& lay = *new layout::eva(5, 5);
     lay.padding = padding(10, 10, 10, 10);
-    lay/**/ | 80        | 'x'   | 'd'  | 10  | 'd' |
-        'd' | lbl_name  |edt_psw| '-'  | '-' | '-' |
-        3   | ' '       | ' '   | ' '  | ' ' | ' ' |
-        'd' | lbl_psw   | prog  | '-'  | '-' | '-' |
-        'x' | ' '       | ' '   | ' '  | ' ' | ' ' |
-        'd' | ' '       | ' '   |btn_ok| ' ' | btn_cancel ;
+    lay/**/ | 80        | 'x'   | 'd'   | 10  | 'd' |
+        'd' | lbl_name  |cmb_com| '-'   | '-' | btn_com |
+        3   | ' '       | ' '   | ' '   | ' ' | ' ' |
+        'd' | lbl_psw   | prog  | '-'   | '-' | '-' |
+        'x' | ' '       | ' '   | ' '   | ' ' | ' ' |
+        'd' | ' '       | ' '   |btn_ok | ' ' | btn_cancel ;
     wnd<window> w = new_<window>()
             .text("login")
             .size(300, 200)
             .resizable(true)
             .layout(&lay);
-    w->add_child(lbl_name, edt_psw,
+    w->add_child(lbl_name,cmb_com,btn_com,
             lbl_psw, prog,
             btn_ok, btn_cancel);
 
@@ -70,8 +78,28 @@ int main()
                   << std::endl;
     };
 
-    // Create and Loop
+    // Create Window
     w->create();
+
+    std::vector<std::string> strPorts;
+    for (int n=0;n<10/*PORTNAME_MAX*/;n++){
+        char cstr[10]={"COM"};
+        sprintf(cstr, "COM%d", n);
+        if (CSerial::CheckPort((LPCTSTR)(cstr))
+                ==CSerial::EPortAvailable){
+            strPorts.emplace_back(cstr);
+            std::cout << cstr<<std::endl;
+        }
+    }
+    for(const std::string& str:strPorts)
+        cmb_com->add_item(str);//必须在控件被create之后才能操作它！
+    btn_com->event.click +=[&](){
+        int index = cmb_com->get_sel();
+        std::string& str=strPorts[index];
+        std::cout <<str << std::endl;
+    };
+
+    //message loop
     msg_loop();
 }
 
