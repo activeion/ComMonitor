@@ -33,36 +33,36 @@ int main()
     wnd<button> btn5("button5");
     wnd<button> btn6("button6");
 
-    /*
-    auto& grid = *new layout::eva(5,3);
+    auto& grid = *new layout::eva(5,5);//增加专门的3个像素的两列网格来增加间隔
     grid.padding = padding(10,10,5,5);
     grid.hgap=5;grid.vgap=5;
-    grid|  75   |   'x'   |   'd'  |
-    'd'| btn1   | btn5    |   '-'  |
-    'd'| btn2   |  '|'    |   ' '  |
-    'd'| btn3   |  '|'    |   ' '  |
-    'x'| ' '    |  '|'    |   ' '  |
-    'd'| btn6   |  '-'    |   btn4 ;
+    grid|  75 | 3  |   'x'   | 3 |  'd'  |
+    'd'| btn1 | ' '| btn5    |'-'|  '-'  |
+    'd'| btn2 | ' '|  '|'    |' '|  ' '  |
+    'd'| btn3 | ' '|  '|'    |' '|  ' '  |
+    'x'| ' '  | ' '|  '|'    |' '|  ' '  |
+    'd'| btn6 | '-'|  '-'    |' '|  btn4 ;
     wnd<window> w1 = new_<window>()
             .text("layout test")
             .resizable(true)
             .size(300,200)
             .layout(&grid);
     w1->add_child(btn1, btn2, btn3, btn4, btn5, btn6);
-    */
 
     //最简化版
-    auto& grid = *new layout::eva(1,3);
+    /*
+    auto& grid = *new layout::eva(1,4);
     grid.padding = padding(10,10,5,5);
-    grid.hgap=4;grid.vgap=4;//没有起作用
-    grid|  75   |   'x'   |   'd'  |
-    'd'| btn6   |  '-'    |   btn4 ;
+    grid.hgap=4;grid.vgap=4;//没有起作用, 需要增加专门的3个像素的网格来增加间隔
+    grid|  75   |   'x'   | 3 |   'd'  |
+    'd'| btn6   |  '-'    |' '|   btn4 ;
     wnd<window> w1 = new_<window>()
             .text("layout test")
             .resizable(true)
             .size(300,200)
             .layout(&grid);
     w1->add_child(btn4, btn6);
+    */
 
 
     w1->create();
