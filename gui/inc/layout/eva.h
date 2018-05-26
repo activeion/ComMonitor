@@ -193,8 +193,10 @@ struct eva : base {
 		// horizontal
 		int start_col = col_num, end_col = col_num;
 
-		while(start_col > 0 && matx[row_num][start_col-1]->extendable(HORIZ)) start_col--;
-		while(end_col < col_count-1 && matx[row_num][end_col+1]->extendable(HORIZ)) end_col++;
+        //根据EvaLayout的定义, 不“向左看”
+        //while(start_col > 0 && matx[row_num][start_col-1]->extendable(HORIZ)) start_col--;
+        //根据EvaLayout的定义, wnd只“向右扩展，向右看”
+        while(end_col < col_count-1 && matx[row_num][end_col+1]->extendable(HORIZ)) end_col++;
 
 		int x = start_col == 0 ? 0 : calc_length(0, start_col-1, HORIZ, total_rect.width());
 		int w = calc_length(start_col, end_col, HORIZ, total_rect.width());
@@ -202,8 +204,10 @@ struct eva : base {
 		// vertical
 		int start_row = row_num, end_row = row_num;
 
-		while(start_row > 0 && matx[start_row-1][col_num]->extendable(VERT)) start_row--;
-		while(end_row < row_count-1 && matx[end_row+1][col_num]->extendable(VERT)) end_row++;
+        //根据EvaLayout的定义, wnd只“向下扩展，向下看”
+        while(start_row > 0 && matx[start_row-1][col_num]->extendable(VERT)) start_row--;
+        //根据EvaLayout的定义, 不“向上看”
+        //while(end_row < row_count-1 && matx[end_row+1][col_num]->extendable(VERT)) end_row++;
 
 		int y = start_row == 0 ? 0 : calc_length(0, start_row-1, VERT, total_rect.height());
 		int h = calc_length(start_row, end_row, VERT, total_rect.height());

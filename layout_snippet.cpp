@@ -22,23 +22,31 @@ using namespace gui;
 #include <string>
 #include "CSerial/SerialWnd.h"
 
+//EvaLayout 官方示例
+//https://www.codeproject.com/Articles/13891/EvaLayout-Lay-it-be
 int main()
 {
     wnd<button> btn1("button1");
-    btn1->event.click +=[](){std::cout << "clicked" << std::endl;};
     wnd<button> btn2("button2");
+    wnd<button> btn3("button3");
+    wnd<button> btn4("button4");
+    wnd<button> btn5("button5");
+    wnd<button> btn6("button6");
 
-    auto& grid = *new layout::eva(1,3);
+    auto& grid = *new layout::eva(5,3);
     grid.padding = padding(10,10,5,5);
     grid|  75   |   'x'   |   'd'  |
-    'd'| btn1   |  '-'    |   btn2 ;
+    'd'| btn1   | btn5    |   '-'  |
+    'd'| btn2   |  '|'    |   ' '  |
+    'd'| btn3   |  '|'    |   ' '  |
+    'x'| ' '    |  '|'    |   ' '  |
+    'd'| btn6   |  '-'    |   btn4 ;
     wnd<window> w1 = new_<window>()
             .text("layout test")
-            .size(300,200)
             .resizable(true)
             .layout(&grid);
-    w1->add_child(btn1, btn2);
+    w1->add_child(btn1, btn2, btn3, btn4, btn5, btn6);
     w1->create();
-    //message loop
+
     msg_loop();
 }
