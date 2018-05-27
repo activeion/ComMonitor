@@ -22,8 +22,6 @@ using namespace gui;
 #include <string>
 #include "CSerial/SerialWnd.h"
 
-//EvaLayout 官方示例
-//https://www.codeproject.com/Articles/13891/EvaLayout-Lay-it-be
 int main()
 {
     wnd<button> btn1("button1");
@@ -33,6 +31,8 @@ int main()
     wnd<button> btn5("button5");
     wnd<button> btn6("button6");
 
+    //EvaLayout 官方示例
+    //https://www.codeproject.com/Articles/13891/EvaLayout-Lay-it-be
     auto& grid = *new layout::eva(5,5);//增加专门的3个像素的两列网格来增加间隔
     grid.padding = padding(10,10,5,5);
     grid.hgap=5;grid.vgap=5;

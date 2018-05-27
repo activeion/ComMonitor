@@ -11,5 +11,5 @@ include_directories(${PROJECT_SOURCE_DIR}/gui/other
 #link_directories(${PROJECT_BINARY_DIR})
 
 
-ADD_EXECUTABLE(com layout_snippet.cpp CSerial/Serial.cpp CSerial/SerialEx.cpp CSerial/SerialWnd.cpp)
+ADD_EXECUTABLE(com ComMonitor.cpp CSerial/Serial.cpp CSerial/SerialEx.cpp CSerial/SerialWnd.cpp)
 Target_Link_Libraries(com Comctl32 libpthread.a)

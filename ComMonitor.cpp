@@ -24,7 +24,6 @@ using namespace gui;
 
 int main()
 {
-
     wnd<combo> cmb_com;
     wnd<button> btn_com("open");
     // ChildWin for MainWindow
