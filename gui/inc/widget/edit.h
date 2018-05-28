@@ -45,7 +45,7 @@ struct edit : widget_base<event::base> {
 		INIT_P_RW(edit, password_char)
 	}
 	virtual void create() {
-		initor::edit* i = (initor::edit*)creator.get();
+		initor::edit* i = (initor::edit*)creator_.get();
 
 		i->password_type() ? i->add_style(ES_PASSWORD) : i->remove_style(ES_PASSWORD);
 
@@ -58,17 +58,17 @@ struct edit : widget_base<event::base> {
 	}
 
     bool get_read_only() { 
-		return (GetWindowLong(hwnd, GWL_STYLE) & ES_READONLY) != 0;
+		return (GetWindowLong(hwnd_, GWL_STYLE) & ES_READONLY) != 0;
     }
     void set_read_only(const bool& val) {
-		send_message(hwnd, EM_SETREADONLY, val);
+		send_message(hwnd_, EM_SETREADONLY, val);
     }
 
     char get_password_char() { 
-		return send_message(hwnd, EM_GETPASSWORDCHAR);
+		return send_message(hwnd_, EM_GETPASSWORDCHAR);
     }
     void set_password_char(const char& val) {
-		send_message(hwnd, EM_SETPASSWORDCHAR, val);
+		send_message(hwnd_, EM_SETPASSWORDCHAR, val);
     }
 
 	

@@ -45,12 +45,12 @@ struct progress : wnd_base<> {
 		return "msctls_progress32";
 	}
 	void range(int min_, int max_) {
-		send_message(hwnd, PBM_SETRANGE32, min_, max_);
+		send_message(hwnd_, PBM_SETRANGE32, min_, max_);
 	}
 
 	int get_min() const { 
 		PBRANGE r;
-		send_message(hwnd, PBM_GETRANGE, true, &r);
+		send_message(hwnd_, PBM_GETRANGE, true, &r);
 		return r.iLow;
 	}
 	void set_min(const int & val) {
@@ -58,30 +58,30 @@ struct progress : wnd_base<> {
 	}
 	int get_max() const { 
 		PBRANGE r;
-		send_message(hwnd, PBM_GETRANGE, false, &r);
+		send_message(hwnd_, PBM_GETRANGE, false, &r);
 		return r.iHigh;
 	}
 	void set_max(const int & val) {
 		range(get_min(), val);
 	}
 	int get_pos() const { 
-		return send_message(hwnd, PBM_GETPOS);
+		return send_message(hwnd_, PBM_GETPOS);
 	}
 	void set_pos(const int& val) {
-		send_message(hwnd, PBM_SETPOS, val);
+		send_message(hwnd_, PBM_SETPOS, val);
 	}
 	void set_step(const int& val) {
-		send_message(hwnd, PBM_SETSTEP, val);
+		send_message(hwnd_, PBM_SETSTEP, val);
 	}
 	void set_bar_color(const int& col) {
-		send_message(hwnd, PBM_SETBARCOLOR, 0, col);
+		send_message(hwnd_, PBM_SETBARCOLOR, 0, col);
 	}
 	void set_bg_color(const int& val) {
-		send_message(hwnd, PBM_SETBKCOLOR, 0, val);
+		send_message(hwnd_, PBM_SETBKCOLOR, 0, val);
 	}
 
 	void step_it() {
-		send_message(hwnd, PBM_STEPIT);
+		send_message(hwnd_, PBM_STEPIT);
 	}
 };
 

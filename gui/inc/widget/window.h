@@ -25,7 +25,7 @@ struct window : panel {
 	typedef panel super_t;
 
 	virtual void process_msg(wnd_msg& msg) {
-		if(msg.type == WM_DESTROY) {
+		if(msg.type_ == WM_DESTROY) {
 			PostQuitMessage(0);
 		}
 		panel::process_msg(msg);

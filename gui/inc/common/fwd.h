@@ -19,27 +19,25 @@ using namespace std;
 
 NS_GUI_BEGIN
 
-struct default_ {
-	template<typename _t>
-	operator _t() { return _t(); }
-	operator string() { return string(); }
-};
+//struct default_ {
+//	template<typename _t>
+//	operator _t() { return _t(); }
+//	operator string() { return string(); }
+//};
 
-struct void_ {};
+//struct void_ {};
 
-struct new_t;
+//struct new_t;
 
-template<class t> struct tag {};
+//template<typename t> struct tag {};
 
-struct window_base;
+//struct window_base;
+
+//template<typename window>
+//struct wnd ;
 
 struct wnd32;
-
 typedef shared_ptr<wnd32> wnd_ptr;
-
-template<class window> 
-struct wnd ;
-
 
 class non_copyable {
 protected:

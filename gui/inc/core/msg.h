@@ -24,48 +24,48 @@ struct send_message {
 
 template<typename value_t>
 struct param {
-	value_t value;
+    value_t value_;
 
-	param(value_t v) : value(v) {}
+    param(value_t v) : value_(v) {}
 
 	template<typename _t>
 	operator _t() {
-		return (_t)value;
+        return (_t)value_;
 	}
 	ushort hiword() {
-		return HIWORD(value);
+        return HIWORD(value_);
 	}
 	ushort loword() {
-		return LOWORD(value);
+        return LOWORD(value_);
 	}
 	// template<typename _t>
 	// bool operator==(_t v) {
 	bool operator==(value_t v) {
-		return value == v;
+        return value_ == v;
 	}
 };
 
 struct wnd_msg {
 	// target, source
-	uint type;
+    uint type_;
 
-	param<uint> wp;
-	param<long> lp;
+    param<uint> wp_;
+    param<long> lp_;
 	
 	// bool stopped;
-	bool killed;
-	long result;
+    bool killed_;
+    long result_;
 
 	wnd_msg(uint type, uint wp, long lp)
-		: killed(false)
+        : killed_(false)
 		// , stopped(false)
-		, result(0)
-		, type(type)
-		, wp(wp)
-		, lp(lp) {}
+        , result_(0)
+        , type_(type)
+        , wp_(wp)
+        , lp_(lp) {}
 
 	void kill() {
-		killed = true;
+        killed_ = true;
 	}
 
 };

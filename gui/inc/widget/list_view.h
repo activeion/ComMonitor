@@ -89,12 +89,12 @@ struct list_view : wnd_base<event::base> {
 		return "syslistview32";
 	}
 	void ensure_visible(int row, bool partially_ok = false) {
-		send_message(hwnd, LVM_ENSUREVISIBLE, row, partially_ok);
+		send_message(hwnd_, LVM_ENSUREVISIBLE, row, partially_ok);
 	}
 
 
 	int get_sel() {
-		return send_message(hwnd, LVM_GETSELECTIONMARK);
+		return send_message(hwnd_, LVM_GETSELECTIONMARK);
 	}
 	void set_sel(int row) {
 		ensure_visible(row);
@@ -102,16 +102,16 @@ struct list_view : wnd_base<event::base> {
 		LVITEM item = {0};
 		item.mask = LVIF_STATE;
 		item.state = item.stateMask = LVIS_SELECTED;
-		SendMessage(hwnd, LVM_SETITEMSTATE, row, (LPARAM)&item);
+		SendMessage(hwnd_, LVM_SETITEMSTATE, row, (LPARAM)&item);
 	}
 	int get_sel_count() {
-        return send_message(hwnd, LVM_GETSELECTEDCOUNT);
+        return send_message(hwnd_, LVM_GETSELECTEDCOUNT);
 	}
 	int get_item_count() {
-		return send_message(hwnd, LVM_GETITEMCOUNT);
+		return send_message(hwnd_, LVM_GETITEMCOUNT);
 	}
 	void set_item_count(int count) {
-        send_message(hwnd, LVM_SETITEMCOUNT, count);
+        send_message(hwnd_, LVM_SETITEMCOUNT, count);
 	}
 	lv_item get_item(int row, int col) {
 
@@ -122,7 +122,7 @@ struct list_view : wnd_base<event::base> {
 		v.iItem = row;
 		v.iSubItem = col;
 		v.mask = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT | LVIF_STATE;
-		send_message(hwnd, LVM_GETITEM, 0, &v);
+		send_message(hwnd_, LVM_GETITEM, 0, &v);
 
 		return lv_item(v.pszText, v.state, v.iImage, v.iIndent);
 	}
@@ -134,7 +134,7 @@ struct list_view : wnd_base<event::base> {
 		x.pszText = (char*)i.text.c_str();
 		x.mask = LVIF_IMAGE | LVIF_TEXT | LVIF_STATE ;
 
-		send_message(hwnd, LVM_SETITEM, 0, &x);
+		send_message(hwnd_, LVM_SETITEM, 0, &x);
 	}
 	void insert_item(int row) {
 		LVITEM x = {0};
@@ -142,7 +142,7 @@ struct list_view : wnd_base<event::base> {
 		x.pszText = (char*)"";
 		x.mask = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT | LVIF_STATE ;
 
-		send_message(hwnd, LVM_INSERTITEM, 0, &x);
+		send_message(hwnd_, LVM_INSERTITEM, 0, &x);
 	}
 	void add_row(int count = 1) {
 		for(int i=0; i<count; i++)
@@ -155,7 +155,7 @@ struct list_view : wnd_base<event::base> {
 	lv_col get_col(int idx) {
 		LVCOLUMN c = {0};
         c.mask = LIST_COLUMN_FLAGS;
-		send_message(hwnd, LVM_GETCOLUMN, idx, &c);
+		send_message(hwnd_, LVM_GETCOLUMN, idx, &c);
 		return lv_col(c.pszText, c.cx);
 	}
 	// void set_col(lv_col& col, int idx) {
@@ -165,7 +165,7 @@ struct list_view : wnd_base<event::base> {
 		x.pszText = (char*)col.text.c_str();
 		x.cx = col.width;
 
-		send_message(hwnd, LVM_SETCOLUMN, idx, &x);
+		send_message(hwnd_, LVM_SETCOLUMN, idx, &x);
 	}
 	list_view* insert_col(int idx, const lv_col& col) {
 		LVCOLUMN x = {0};
@@ -173,11 +173,11 @@ struct list_view : wnd_base<event::base> {
 		x.pszText = (char*)col.text.c_str();
 		x.cx = col.width;
 		
-		send_message(hwnd, LVM_INSERTCOLUMN, idx, &x);
+		send_message(hwnd_, LVM_INSERTCOLUMN, idx, &x);
 		return this;
 	}
 	int get_col_count() {
-		HWND header = ListView_GetHeader(hwnd);
+		HWND header = ListView_GetHeader(hwnd_);
 		return send_message(header, HDM_GETITEMCOUNT);
 	}
 	list_view* add_col(const lv_col& col) {
@@ -189,11 +189,11 @@ struct list_view : wnd_base<event::base> {
 		return this;
 	}
 	void full_row_select() {
-		LRESULT l = send_message(hwnd, LVM_GETEXTENDEDLISTVIEWSTYLE);
-		send_message(hwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, l|LVS_EX_FULLROWSELECT);
+		LRESULT l = send_message(hwnd_, LVM_GETEXTENDEDLISTVIEWSTYLE);
+		send_message(hwnd_, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, l|LVS_EX_FULLROWSELECT);
 	}
 	void clear() {
-		send_message(hwnd, LVM_DELETEALLITEMS);
+		send_message(hwnd_, LVM_DELETEALLITEMS);
 	}
 
 };

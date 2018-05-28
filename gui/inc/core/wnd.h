@@ -8,10 +8,10 @@ NS_GUI_BEGIN
 template<typename wnd_t>
 struct wnd {
 
-	wnd_ptr impl;
+    wnd_ptr impl_;
 
 	operator wnd_ptr() const {
-		return impl;
+        return impl_;
 	}
 
 	typedef typename wnd_traits<wnd_t>::initor_t initor_t;
@@ -19,21 +19,21 @@ struct wnd {
 	// for wnd<button> b;
 
 	template<typename... ctor_args_t>
-	wnd(ctor_args_t... args) : impl(new wnd_t) {
-		impl->creator = initor_ptr(&new_<wnd_t>(args...));
+    wnd(ctor_args_t... args) : impl_(new wnd_t) {
+        impl_->creator_ = initor_ptr(&new_<wnd_t>(args...));
 	}
 
 	// for wnd<button> = new_<>().xx().yy();
-	wnd(initor_t& i) : impl(new wnd_t) {
-		impl->creator = initor_ptr(&i);
+    wnd(initor_t& i) : impl_(new wnd_t) {
+        impl_->creator_ = initor_ptr(&i);
 	}
 	// for wnd<button> b; b = new_<>().xx().yy();
 	void operator=(initor_t& i) {
-		impl->creator = initor_ptr(&i);
+        impl_->creator_ = initor_ptr(&i);
 	}
 
 	wnd_t* operator->() {
-		return (wnd_t*)impl.get();
+        return (wnd_t*)impl_.get();
 	}
 };
 

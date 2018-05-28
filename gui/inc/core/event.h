@@ -35,19 +35,19 @@ namespace event {
 		signal<void()> lost_focus;
 
 		virtual void process_msg(wnd_msg& msg) {
-			switch(msg.type) {
-				case WM_MOVE:			move(pos_t(msg.lp.loword(), msg.lp.hiword())); break;
-				case WM_SIZE:			size(size_t(msg.lp.loword(), msg.lp.hiword())); break;
-				case WM_ACTIVATE:		activate(msg.wp.loword() == WA_ACTIVE || msg.wp.loword() == WA_CLICKACTIVE); break;
+            switch(msg.type_) {
+                case WM_MOVE:			move(pos_t(msg.lp_.loword(), msg.lp_.hiword())); break;
+                case WM_SIZE:			size(size_t(msg.lp_.loword(), msg.lp_.hiword())); break;
+                case WM_ACTIVATE:		activate(msg.wp_.loword() == WA_ACTIVE || msg.wp_.loword() == WA_CLICKACTIVE); break;
 				case WM_PAINT:			paint(msg); break;
-				case WM_ENABLE:			enable(!(msg.wp == 0)); break; // urgly syntax to prevent C4800 performance warning
+                case WM_ENABLE:			enable(!(msg.wp_ == 0)); break; // urgly syntax to prevent C4800 performance warning
 				case WM_CLOSE:			close(); break;
 				case WM_QUIT:			quit(); break;
-				case WM_SHOWWINDOW:		show(!(msg.wp == 0)); break;
+                case WM_SHOWWINDOW:		show(!(msg.wp_ == 0)); break;
 				case WM_MOVING:			moving(msg); break;
 				case WM_SIZING:			sizing(msg); break;
 				case WM_ERASEBKGND:		erase_bg(msg); break;
-				case WM_CHAR:			char_(msg.wp); break;
+                case WM_CHAR:			char_(msg.wp_); break;
 				case WM_MOUSEMOVE:		mouse_move(msg); break;
 				case WM_LBUTTONDOWN:	mouse_down(msg); break;
 				case WM_LBUTTONUP:		mouse_up(msg); break;

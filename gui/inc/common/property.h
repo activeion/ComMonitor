@@ -12,10 +12,10 @@ namespace property {
 	// helpers only used for property with args
 	template<typename r_t, typename value_t, typename...arg_t>
 	struct r_helper {
-		r_t* _r;
+        r_t* r_;
 		function<value_t()> getter;
 
-		r_helper(r_t* _r, arg_t...arg) : _r(_r), getter(bind(_r->getter, arg...)) {
+        r_helper(r_t* _r, arg_t...arg) : r_(_r), getter(bind(_r->getter, arg...)) {
 		}
 		operator value_t() {
 			return getter();
@@ -23,10 +23,10 @@ namespace property {
 	};
 	template<typename w_t, typename value_t, typename...arg_t>
 	struct w_helper {
-		w_t* _w;
+        w_t* w_;
 		function<void(const value_t&)> setter;
 
-		w_helper(w_t* _w, arg_t...arg) : _w(_w), setter(bind(_w->setter, arg..., placeholders::_1)) {
+        w_helper(w_t* _w, arg_t...arg) : w_(_w), setter(bind(_w->setter, arg..., placeholders::_1)) {
 		}
 		void operator=(const value_t& new_val) {
 			setter(new_val);
@@ -45,7 +45,7 @@ namespace property {
 	template<typename value_t, typename...arg_t>
 	struct r {
 		typedef r<value_t, arg_t...> self_t;
-		function<value_t(arg_t...)> getter;
+        function<value_t(arg_t...)> getter_;
 
 		r_helper<self_t, value_t, arg_t...> operator()(arg_t...arg) {
 			return r_helper<self_t, value_t, arg_t...>(this, arg...);
@@ -53,25 +53,25 @@ namespace property {
 	};
 	template<typename value_t>
 	struct r<value_t> {
-		function<value_t()> getter;
+        function<value_t()> getter_;
 		operator value_t() {
-			return getter();
+            return getter_();
 		}
 	};
 
 	template<typename value_t, typename...arg_t>
 	struct w {
 		typedef w<value_t, arg_t...> self_t;
-		function<void(arg_t...arg, const value_t&)> setter;
+        function<void(arg_t...arg, const value_t&)> setter_;
 		w_helper<self_t, value_t, arg_t...> operator()(arg_t...arg) {
 			return w_helper<self_t, value_t, arg_t...>(this, arg...);
 		}
 	};
 	template<typename value_t>
 	struct w<value_t> {
-		function<void(const value_t&)> setter;
+        function<void(const value_t&)> setter_;
 		void operator=(const value_t& new_val) {
-			setter(new_val);
+            setter_(new_val);
 		}
 	};
 
@@ -92,16 +92,16 @@ namespace property {
 	// bind_property
 	template<typename value_t, typename...arg_t, typename getter_t> // r
 	void bind_property(r<value_t, arg_t...>& p, getter_t getter) {
-		p.getter = getter;
+        p.getter_ = getter;
 	}
 	template<typename value_t, typename...arg_t, typename setter_t>
 	void bind_property(w<value_t, arg_t...>& p, setter_t setter) { // w
-		p.setter = setter;
+        p.setter_ = setter;
 	}
 	template<typename value_t, typename...arg_t, typename getter_t, typename setter_t> // rw
 	void bind_property(rw<value_t, arg_t...>& p, getter_t getter, setter_t setter) {
-		p.getter = getter;
-		p.setter = setter;
+        p.getter_ = getter;
+        p.setter_ = setter;
 	}
 	
 #define INIT_P_RW(cls, attr) \

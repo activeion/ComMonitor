@@ -42,7 +42,7 @@ struct splitter : widget_base<> {
 		event.mouse_move += [this](wnd_msg& msg) { on_move(msg); };
 
 		event.erase_bg += [this](wnd_msg& msg) {
-			HDC hdc = msg.wp;
+			HDC hdc = msg.wp_;
 			
 			rect_t r = calculate_draw_size();
 
@@ -52,7 +52,7 @@ struct splitter : widget_base<> {
 			rc = r;
 			DrawFocusRect(hdc, &rc);
 
-			msg.result = 1; // return non-zero for WM_ERASEBKGND
+			msg.result_ = 1; // return non-zero for WM_ERASEBKGND
 			msg.kill(); // skip default_wnd_proc
 		};
 	}
@@ -77,7 +77,7 @@ struct vsplitter : splitter {
 		cursor::set(cursor::type::size_we);
 	}
 	virtual int get_click_offset(wnd_msg& msg) {
-		return msg.lp.loword();
+		return msg.lp_.loword();
 	}
 	virtual rect_t calculate_draw_size() {
 		rect_t _r = this->rect;
@@ -88,15 +88,15 @@ struct vsplitter : splitter {
 	}
 	virtual void on_move(wnd_msg& msg) {
 
-		if ((msg.wp == MK_LBUTTON) && is_dragging) {
+		if ((msg.wp_ == MK_LBUTTON) && is_dragging) {
 
-			short offset = msg.lp.loword();
+			short offset = msg.lp_.loword();
 
 			rect_t rc = this->rect;
 
 			this->rect = rc.offset(offset - click_offset, 0);
 
-			static_cast<container<>*>(parent.get())->do_layout();
+			static_cast<container<>*>(parent_.get())->do_layout();
 		}
 	}
 };
@@ -105,7 +105,7 @@ struct hsplitter : splitter {
 		cursor::set(cursor::type::size_ns);
 	}
 	virtual int get_click_offset(wnd_msg& msg) {
-		return msg.lp.hiword();
+		return msg.lp_.hiword();
 	}
 	virtual rect_t calculate_draw_size() {
 		rect_t _r = this->rect;
@@ -116,15 +116,15 @@ struct hsplitter : splitter {
 	}
 	virtual void on_move(wnd_msg& msg) {
 
-		if ((msg.wp == MK_LBUTTON) && is_dragging) {
+		if ((msg.wp_ == MK_LBUTTON) && is_dragging) {
 
-			short offset = msg.lp.hiword();
+			short offset = msg.lp_.hiword();
 
 			rect_t rc = this->rect;
 
 			this->rect = rc.offset(0, offset - click_offset);
 
-			static_cast<container<>*>(parent.get())->do_layout();
+			static_cast<container<>*>(parent_.get())->do_layout();
 		}
 	}
 };

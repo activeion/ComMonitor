@@ -12,8 +12,8 @@ NS_GUI_BEGIN
 // reflect WM_COMMAND
 void reflect_combo_msg() {
 	msg_reflector::reg(WM_COMMAND, [](wnd_msg& msg) {
-		if(msg.wp.hiword() == CBN_SELCHANGE) {
-			send_message(msg.lp, COMBO_SEL_CHANGE);
+		if(msg.wp_.hiword() == CBN_SELCHANGE) {
+			send_message(msg.lp_, COMBO_SEL_CHANGE);
 		}
 	});
 }
@@ -26,7 +26,7 @@ namespace event {
 		virtual void process_msg(wnd_msg& msg) {
 			event::base::process_msg(msg);
 
-			switch(msg.type) {
+			switch(msg.type_) {
 				case COMBO_SEL_CHANGE: sel_change(); break;
 			}
 		}
@@ -73,24 +73,24 @@ struct combo : widget_base<event::combo> {
 	}
 	template<typename first_t, typename...rest_t>
 	combo& add_item(const first_t& first, const rest_t&... rest) { 
-		send_message(hwnd, CB_ADDSTRING, 0, first.c_str());
+        send_message(hwnd_, CB_ADDSTRING, 0, first.c_str());
 		return add_item(rest...);
 	}
 	
 	int get_item_count() const { 
-        return send_message(hwnd, CB_GETCOUNT);
+        return send_message(hwnd_, CB_GETCOUNT);
     }
     int get_sel() const { 
-        return send_message(hwnd, CB_GETCURSEL);
+        return send_message(hwnd_, CB_GETCURSEL);
     }
     void set_sel(const int& val) {
-        send_message(hwnd, CB_SETCURSEL, val);
+        send_message(hwnd_, CB_SETCURSEL, val);
     }
     string get_item_text(int val) const {
-        int len = send_message(hwnd, CB_GETLBTEXTLEN, val);
+        int len = send_message(hwnd_, CB_GETLBTEXTLEN, val);
         string result;
         result.resize(len + 10 /*just in case*/);
-        int new_size = send_message(hwnd, CB_GETLBTEXT, val, &*result.begin() );
+        int new_size = send_message(hwnd_, CB_GETLBTEXT, val, &*result.begin() );
         result.resize( new_size >= 0 ? new_size : 0);
         return result;
     }

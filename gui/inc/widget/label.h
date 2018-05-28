@@ -60,7 +60,7 @@ struct label : widget_base<> {
 		return "STATIC";
 	}
 	void create() {
-		initor::label* i = (initor::label*)creator.get();
+        initor::label* i = (initor::label*)creator_.get();
 
 		super_t::create();
 
@@ -69,9 +69,9 @@ struct label : widget_base<> {
 		}
 	}
 	void set_bitmap(HBITMAP hbmp, bool delete_old = true) {
-		HBITMAP old = send_message(hwnd, STM_GETIMAGE, IMAGE_BITMAP);
+        HBITMAP old = send_message(hwnd_, STM_GETIMAGE, IMAGE_BITMAP);
 		style = style | (SS_BITMAP | SS_CENTERIMAGE);
-		send_message(hwnd, STM_SETIMAGE, IMAGE_BITMAP, hbmp);
+        send_message(hwnd_, STM_SETIMAGE, IMAGE_BITMAP, hbmp);
 		if(delete_old && old) {
 			::DeleteObject(old);
 		}

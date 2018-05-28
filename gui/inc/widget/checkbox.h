@@ -57,10 +57,10 @@ struct checkbox : button {
 	}
 
 	bool get_checked() {
-		return send_message(hwnd, BM_GETCHECK) == BST_CHECKED;
+		return send_message(hwnd_, BM_GETCHECK) == BST_CHECKED;
 	}
 	void set_checked(bool check) {
-		send_message(hwnd, BM_SETCHECK, check);
+		send_message(hwnd_, BM_SETCHECK, check);
 
 	}
 };

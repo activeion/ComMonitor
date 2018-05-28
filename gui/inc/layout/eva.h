@@ -212,7 +212,7 @@ struct eva : base {
 		int y = start_row == 0 ? 0 : calc_length(0, start_row-1, VERT, total_rect.height());
 		int h = calc_length(start_row, end_row, VERT, total_rect.height());
 
-		return rect_t(x, y, w, h).offset(total_rect.pos);
+        return rect_t(x, y, w, h).offset(total_rect.pos_);
 	}
 
 	int calc_length(int from_index, int to_index, direction dir, int total_length) {// total_length used for 'x'

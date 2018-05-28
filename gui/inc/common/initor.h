@@ -10,28 +10,28 @@ namespace initor {
 
 	template<typename value_t, typename ret_t>
 	struct attr {
-		value_t val;
+        value_t val_;
 
-		ret_t* ret;
-		attr() : val(value_t()) {}
+        ret_t* ret_;
+        attr() : val_(value_t()) {}
 
 		template<typename any_t>
 		void bind_owner(any_t* o) {
-			ret = (ret_t*)o;
+            ret_ = (ret_t*)o;
 		}
 
 		value_t operator()() {
-			return val;
+            return val_;
 		}
 		template<typename...ctor_args_t>
 		ret_t& operator()(const ctor_args_t&...arg) {
 			value_t v(arg...);
-			val = v;
-			return *ret;
+            val_ = v;
+            return *ret_;
 		}
 	};
 
-	struct abstract : non_copyable {};
+    class abstract : non_copyable {};
 
 	template<typename derive_t>
 	struct base : abstract, std::enable_shared_from_this<derive_t> {

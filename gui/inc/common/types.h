@@ -5,16 +5,16 @@ NS_GUI_BEGIN
 
 
 struct pos {
-	int x;
-	int y;
-	pos() : x(CW_USEDEFAULT), y(CW_USEDEFAULT) {}
-	pos(int x, int y) : x(x), y(y) {}
+    int x_;
+    int y_;
+    pos() : x_(CW_USEDEFAULT), y_(CW_USEDEFAULT) {}
+    pos(int x, int y) : x_(x), y_(y) {}
 };
 struct size {
-	int w;
-	int h;
-	size() : w(CW_USEDEFAULT), h(CW_USEDEFAULT) {}
-	size(int w, int h) : w(w), h(h) {}
+    int w_;
+    int h_;
+    size() : w_(CW_USEDEFAULT), h_(CW_USEDEFAULT) {}
+    size(int w, int h) : w_(w), h_(h) {}
 };
 
 struct rect {
@@ -22,38 +22,38 @@ struct rect {
 	typedef gui::pos pos_t;
 	typedef gui::size size_t;
 
-	pos_t pos;
-	size_t size;
+    pos_t pos_;
+    size_t size_;
 
 	rect() {}
 
 	rect(int x, int y, int w, int h) 
-		: pos(pos_t(x, y)), size(size_t(w, h)) {
+        : pos_(pos_t(x, y)), size_(size_t(w, h)) {
 	}
 	int x() const {
-		return pos.x;
+        return pos_.x_;
 	}
 	int y() const {
-		return pos.y;
+        return pos_.y_;
 	}
 	int width() const {
-		return size.w;
+        return size_.w_;
 	}
 	int height() const {
-		return size.h;
+        return size_.h_;
 	}
 	int right() const {
-		return pos.x + size.w;
+        return pos_.x_ + size_.w_;
 	}
 	int bottom() const {
-		return pos.y + size.h;
+        return pos_.y_ + size_.h_;
 	}
 	rect& offset(pos_t& p) {
-		return offset(p.x, p.y);
+        return offset(p.x_, p.y_);
 	}
 	rect& offset(int dx, int dy) {
-		pos.x += dx;
-		pos.y += dy;
+        pos_.x_ += dx;
+        pos_.y_ += dy;
 		return *this;
 	}
 	operator RECT() {
@@ -81,10 +81,10 @@ struct margin {
 rect exclude_margin(rect& rc, margin& p) {
 	rect r = rc;
 
-	r.pos.x += p.left;
-	r.pos.y += p.top;
-	r.size.w -= p.left + p.right;
-	r.size.h -= p.top + p.bottom;
+    r.pos_.x_ += p.left;
+    r.pos_.y_ += p.top;
+    r.size_.w_ -= p.left + p.right;
+    r.size_.h_ -= p.top + p.bottom;
 
 	return r;
 }

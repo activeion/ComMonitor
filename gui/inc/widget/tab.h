@@ -10,9 +10,9 @@ NS_GUI_BEGIN
 
 void reflect_tab_msg() {
 	msg_reflector::reg(WM_NOTIFY, [](wnd_msg& msg) {
-		NMHDR* hdr = msg.lp;
+        NMHDR* hdr = msg.lp_;
 		if(hdr->code == TCN_SELCHANGE) {
-			::PostMessage(hdr->hwndFrom, TAB_CHANGE, msg.wp, msg.lp);
+            ::PostMessage(hdr->hwndFrom, TAB_CHANGE, msg.wp_, msg.lp_);
 		}
 	});
 }
@@ -50,7 +50,7 @@ struct tab : container<event::base> {
 	void process_msg(wnd_msg& msg) {
 		super_t::process_msg(msg);
 
-		if(msg.type == TAB_CHANGE) {
+        if(msg.type_ == TAB_CHANGE) {
 			int index = get_active();
 			active = index;
 		}
@@ -58,7 +58,7 @@ struct tab : container<event::base> {
 
 	virtual void create() {
 		super_t::create();
-		for(auto& c : children) {
+		for(auto& c : children_) {
 			c->visible = false;
 			add_tab_header(c->text);
 		}
@@ -66,17 +66,17 @@ struct tab : container<event::base> {
 	}
 
 	int get_active() {
-		return TabCtrl_GetCurSel(hwnd);
+        return TabCtrl_GetCurSel(hwnd_);
 	}
 	void set_active(int index) {
-		if((int)children.size() <= index) return;
-		wnd_ptr& act = children[index];
-		static_cast<layout::tab*>(layout.get())->activate(act);
-		TabCtrl_SetCurSel(hwnd, index);
+		if((int)children_.size() <= index) return;
+		wnd_ptr& act = children_[index];
+        static_cast<layout::tab*>(layout_.get())->activate(act);
+        TabCtrl_SetCurSel(hwnd_, index);
 	}
 
 	int tab_count() {
-		return TabCtrl_GetItemCount(hwnd);
+        return TabCtrl_GetItemCount(hwnd_);
 	}
 	
 	void add_tab_header(const string& name) {
@@ -87,7 +87,7 @@ struct tab : container<event::base> {
 		tie.mask = TCIF_TEXT;
 		tie.pszText = (char*)name.c_str();
 		tie.lParam = index;
-		TabCtrl_InsertItem(hwnd, index, &tie);
+        TabCtrl_InsertItem(hwnd_, index, &tie);
 	}
 
 };

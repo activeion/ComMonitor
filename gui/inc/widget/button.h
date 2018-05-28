@@ -8,8 +8,8 @@ NS_GUI_BEGIN
 // reflect WM_COMMAND
 void reflect_button_msg() {
 	msg_reflector::reg(WM_COMMAND, [](wnd_msg& msg) {
-		if(msg.wp == BN_CLICKED) {
-			send_message(msg.lp, BTN_CLICK);
+		if(msg.wp_ == BN_CLICKED) {
+			send_message(msg.lp_, BTN_CLICK);
 		}
 	});
 }
@@ -43,7 +43,7 @@ namespace event {
 		virtual void process_msg(wnd_msg& msg) {
 			event::base::process_msg(msg);
 
-			switch(msg.type) {
+			switch(msg.type_) {
 				case BTN_CLICK: click(); break;
 			}
 		}
@@ -58,7 +58,7 @@ struct button : wnd_base<event::button> {
 		return "button";
 	}
 	void click() {
-		send_message(hwnd, BTN_CLICK);
+        send_message(hwnd_, BTN_CLICK);
 	}
 };
 

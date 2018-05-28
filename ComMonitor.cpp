@@ -73,7 +73,7 @@ int main()
     };
     w->event.move += [](const pos& p) {
         std::cout << "window moved to ("
-                  << p.x << "| " << p.y << ")"
+                  << p.x_ << "| " << p.y_ << ")"
                   << std::endl;
     };
 

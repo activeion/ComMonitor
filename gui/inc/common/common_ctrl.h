@@ -2,7 +2,7 @@
 #include "./fwd.h"
 
 #include <commctrl.h>
-struct comm_ctrl {
+class comm_ctrl {
 	static void init(long type) {
 		INITCOMMONCONTROLSEX icx;
 		icx.dwSize = sizeof(icx);
@@ -10,5 +10,3 @@ struct comm_ctrl {
 		InitCommonControlsEx(&icx);		
 	}
 };
-
-

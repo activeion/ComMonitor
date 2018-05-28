@@ -16,13 +16,13 @@ NS_GUI_BEGIN
 struct wnd32 : std::enable_shared_from_this<wnd32> {
 	typedef wnd32 self_t;
 
-	HWND hwnd;
+    HWND hwnd_;
 
-	wnd_ptr parent;
+    wnd_ptr parent_;
 
-	initor_ptr creator;
+    initor_ptr creator_;
 
-	WNDPROC old_wnd_proc;
+    WNDPROC old_wnd_proc_;
 
 	thunk<self_t, LRESULT(HWND,DWORD,WPARAM,LPARAM)> wnd_thunk;
 
@@ -50,35 +50,35 @@ struct wnd32 : std::enable_shared_from_this<wnd32> {
 		INIT_P_R(self_t, client_rect)
 	}
 	operator bool() {
-		return !!IsWindow(hwnd);
+        return !!IsWindow(hwnd_);
 	}
 
 	// create
 	virtual void create() {
-		initor::wnd* i = (initor::wnd*)creator.get();
+        initor::wnd* i = (initor::wnd*)creator_.get();
 
-		hwnd = ::CreateWindowEx(
+        hwnd_ = ::CreateWindowEx(
 			i->ex_style(),
 			class_name().c_str(),
 			i->text().c_str(),
 			i->style(),
-			i->pos().x,
-			i->pos().y,
-			i->size().w,
-			i->size().h,
-			parent? parent->hwnd : 0,
+			i->pos().x_,
+            i->pos().y_,
+			i->size().w_,
+			i->size().h_,
+            parent_? parent_->hwnd_ : 0,
 			0, // hmenu
 			0, // hinstance
 			0);// create param
-		assert(hwnd && "CreateWindowEx fail");
+        assert(hwnd_ && "CreateWindowEx fail");
 
 		intercept_wnd_proc();
-		UpdateWindow(hwnd);
+        UpdateWindow(hwnd_);
 
 	}
 
 	void intercept_wnd_proc() {
-		old_wnd_proc = (WNDPROC)::SetWindowLong(hwnd, GWL_WNDPROC, wnd_thunk.addr());
+        old_wnd_proc_ = (WNDPROC)::SetWindowLong(hwnd_, GWL_WNDPROC, wnd_thunk.addr());
 	}
 	virtual void process_msg(wnd_msg&) {}
 
@@ -87,10 +87,10 @@ struct wnd32 : std::enable_shared_from_this<wnd32> {
 		
 		process_msg(msg);
 
-		if(msg.killed) {
-			return msg.result;
+		if(msg.killed_) {
+			return msg.result_;
 		} else {
-			return ::CallWindowProc(old_wnd_proc, hwnd, type, wp, lp);
+            return ::CallWindowProc(old_wnd_proc_, hwnd, type, wp, lp);
 		}
 	}
 	virtual string class_name() {
@@ -101,86 +101,86 @@ struct wnd32 : std::enable_shared_from_this<wnd32> {
 
 	// visible
 	bool get_visible() {
-		return !!::IsWindowVisible(hwnd);
+        return !!::IsWindowVisible(hwnd_);
 	}
 	void set_visible(bool visible) {
-		::ShowWindow(hwnd, visible ? SW_SHOW : SW_HIDE);
+        ::ShowWindow(hwnd_, visible ? SW_SHOW : SW_HIDE);
 	}
 
 	// text
 	string get_text() {
-		int len = ::GetWindowTextLength(hwnd) + 1;
+        int len = ::GetWindowTextLength(hwnd_) + 1;
 		string t;
 		t.resize(len);
-		len = ::GetWindowText(hwnd, &*t.begin(), len);
+        len = ::GetWindowText(hwnd_, &*t.begin(), len);
 		t.resize(len);
 		return t;
 	}
 	void set_text(const string& t) {
-		::SetWindowText(hwnd, t.c_str());
+        ::SetWindowText(hwnd_, t.c_str());
 	}
 
 	// enabled
 	bool get_enabled() {
-		return !!::IsWindowEnabled(hwnd);
+        return !!::IsWindowEnabled(hwnd_);
 	}
 	void set_enabled(bool e) {
-		::EnableWindow(hwnd, e);
+        ::EnableWindow(hwnd_, e);
 	}
 	// rect
 	rect_t get_rect() {
 		RECT r;
-		::GetWindowRect(hwnd, &r);
+        ::GetWindowRect(hwnd_, &r);
 		int w = r.right - r.left;
 		int h = r.bottom - r.top;
 
-		if(parent) {
+        if(parent_) {
 			POINT p = {r.left, r.top};
-			ScreenToClient(parent->hwnd, &p);
+            ScreenToClient(parent_->hwnd_, &p);
 			r.left = p.x;
 			r.top = p.y;
 		}
 		return rect_t(r.left, r.top, w, h);
 	}
 	void set_rect(const rect_t& r) {
-		::MoveWindow(hwnd, r.x(), r.y(), r.width(), r.height(), true);
+        ::MoveWindow(hwnd_, r.x(), r.y(), r.width(), r.height(), true);
 	}
 	// client_rect
 	rect_t get_client_rect() {
 		RECT r;
-		::GetClientRect(hwnd, &r);
+        ::GetClientRect(hwnd_, &r);
 		return rect_t(r.left, r.top, r.right-r.left, r.bottom-r.top);
 	}
 	// style
 	long get_style() {
-		return ::GetWindowLong(hwnd, GWL_STYLE);
+        return ::GetWindowLong(hwnd_, GWL_STYLE);
 	}
 	void set_style(long st) {
-		::SetWindowLong(hwnd, st, GWL_STYLE);
-		::SetWindowPos(hwnd, 0,0,0,0,0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_FRAMECHANGED);
+        ::SetWindowLong(hwnd_, st, GWL_STYLE);
+        ::SetWindowPos(hwnd_, 0,0,0,0,0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_FRAMECHANGED);
 	}
 	long get_ex_style() {
-		return ::GetWindowLong(hwnd, GWL_EXSTYLE);
+        return ::GetWindowLong(hwnd_, GWL_EXSTYLE);
 	}
 	void set_ex_style(long st) {
-		::SetWindowLong(hwnd, st, GWL_EXSTYLE);
-		::SetWindowPos(hwnd, 0,0,0,0,0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_FRAMECHANGED);
+        ::SetWindowLong(hwnd_, st, GWL_EXSTYLE);
+        ::SetWindowPos(hwnd_, 0,0,0,0,0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_FRAMECHANGED);
 	}
 	
 	// capture
 	void set_capture(bool flag) {
 		if(flag) {
-			SetCapture(hwnd);
+            SetCapture(hwnd_);
 		} else {
 			ReleaseCapture();
 		}
 	}
 	// others
 	void bring_to_top() {
-		::BringWindowToTop(hwnd);
+        ::BringWindowToTop(hwnd_);
 	}
 	void flash(bool invert = false) {
-		::FlashWindow(hwnd, invert);
+        ::FlashWindow(hwnd_, invert);
 	}
 
 };

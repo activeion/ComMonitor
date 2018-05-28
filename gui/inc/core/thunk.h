@@ -25,15 +25,15 @@ struct thunk_base {
 		}
 	};
 #pragma pack(pop)
-	thunk_code* code;
+    thunk_code* code_;
 
 	thunk_base() {
-		code = heap::inst().alloc<thunk_code>();
-		code->init();
+        code_ = heap::inst().alloc<thunk_code>();
+        code_->init();
 	}
 	~thunk_base() {
-		if(code) {
-			heap::inst().free(code);
+        if(code_) {
+            heap::inst().free(code_);
 		}
 	}
 };
@@ -49,17 +49,17 @@ struct thunk<class_t, ret_t(arg_t...)> : thunk_base {
 	typedef ret_t (__thiscall class_t::*memfun_type)(arg_t...);
 
 	void init(class_t* obj, memfun_type mem_fun) {
-		code->p_this = (unsigned long)(obj);
-		code->jump_proc = *(unsigned long*)(&mem_fun);
+        code_->p_this = (unsigned long)(obj);
+        code_->jump_proc = *(unsigned long*)(&mem_fun);
 
-		::FlushInstructionCache(GetCurrentProcess(), code, sizeof(thunk_code));
+        ::FlushInstructionCache(GetCurrentProcess(), code_, sizeof(thunk_code));
 	}
 
 	unsigned long addr() {
-		return (unsigned long)code;
+        return (unsigned long)code_;
 	}
 	ret_t operator()(arg_t... args) {
-		return ((callback_type)code)(args...);
+        return ((callback_type)code_)(args...);
 	}
 };
 

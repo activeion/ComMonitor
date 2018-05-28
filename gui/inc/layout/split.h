@@ -20,7 +20,7 @@ namespace layout {
 
 		void create_splitter_once(const wnd_ptr& p) {
 			std::call_once(init_flag, [&p, this]() {
-				sp->parent = p;
+				sp->parent_ = p;
 				sp->create();
 			});
 		}
@@ -61,7 +61,7 @@ namespace layout {
 
 		void create_splitter_once(wnd_ptr& p) {
 			std::call_once(init_flag, [&p, this]() {
-				sp->parent = p;
+				sp->parent_ = p;
 				sp->create();
 			});
 		}

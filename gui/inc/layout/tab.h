@@ -19,7 +19,7 @@ namespace layout {
 		virtual void apply(const wnd_ptr& p, const vector<wnd_ptr>& ch) {
 
 			rect r = p->client_rect;
-			r.pos.y += 24; // tab header buttons
+			r.pos_.y_ += 24; // tab header buttons
 
 			for(auto& c : ch) {
 				c->rect = r;

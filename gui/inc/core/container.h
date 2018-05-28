@@ -14,15 +14,15 @@ struct container : wnd_base<event_t> {
 
 	typedef vector<wnd_ptr> children_t;
 
-	children_t children;
+    children_t children_;
 
-	shared_ptr<layout::base> layout;
+    shared_ptr<layout::base> layout_;
 
 	virtual void process_msg(wnd_msg& msg) {
 		// reflect
 		msg_reflector::process_msg(msg);
 
-		if(msg.type == WM_SIZE) {
+        if(msg.type_ == WM_SIZE) {
 			this->do_layout();
 		}
 		super_t::process_msg(msg);
@@ -32,25 +32,25 @@ struct container : wnd_base<event_t> {
 
 	template<typename... rest_t>
 	wnd_ptr add_child(wnd_ptr first, rest_t...rest) {
-		children.push_back(first);
-		first->parent = this->shared_from_this();
+        children_.push_back(first);
+        first->parent_ = this->shared_from_this();
 
 		return add_child(rest...);
 	}
 	void do_layout() {
-		if(layout) {
-			layout->apply(this->shared_from_this(), children);
+        if(layout_) {
+            layout_->apply(this->shared_from_this(), children_);
 		}
 	}
 	virtual void create() {
-		initor::wnd* i = (initor::wnd*)this->creator.get();
-		layout = i->layout();
+        initor::wnd* i = (initor::wnd*)this->creator_.get();
+        layout_ = i->layout();
 		super_t::create();
 		create_children();
 		do_layout();
 	}
 	void create_children() {
-		for(auto c : children) {
+        for(auto c : children_) {
 			c->create();
 		}
 	}

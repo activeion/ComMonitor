@@ -9,16 +9,16 @@ NS_GUI_BEGIN
 #endif
 
 struct heap : singleton<heap> {
-	HANDLE h;
+    HANDLE h_;
 	heap() {
-		h = ::HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
-		if(!h) {
+        h_ = ::HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
+        if(!h_) {
 			throw last_err("HeapCreate");
 		}
 	}
 
 	void* alloc(int size) {
-		void* memory = ::HeapAlloc(h, HEAP_ZERO_MEMORY, size);
+        void* memory = ::HeapAlloc(h_, HEAP_ZERO_MEMORY, size);
 		if(!memory) {
 			throw last_err("HeapAlloc");
 		}
@@ -31,7 +31,7 @@ struct heap : singleton<heap> {
 
 	template <typename _t>
 	bool free(_t* addr) {
-		return !!::HeapFree(h, 0, (void*)addr);
+        return !!::HeapFree(h_, 0, (void*)addr);
 	}
 };
 
